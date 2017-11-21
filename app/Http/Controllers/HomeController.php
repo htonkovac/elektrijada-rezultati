@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,4 +26,17 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function test(Request $request)
+    {
+        $request->user()->authorizeRoles(Role::ROLE_ADMIN);
+        
+        return view('home');
+    }
+
 }
