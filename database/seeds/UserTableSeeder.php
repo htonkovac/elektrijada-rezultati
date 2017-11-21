@@ -23,7 +23,8 @@ class UserTableSeeder extends Seeder
         $admin->password = bcrypt('admin');
         $admin->save();
         $admin->roles()->attach($roleAdmin);
-
+        $admin->roles()->attach($roleUser);
+        
         $user = new User();
         $user->name = 'user';
         $user->email = 'user@user.user';
