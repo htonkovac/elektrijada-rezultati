@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class FacultyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,7 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        //
+        dd('hello');
     }
 
     /**
