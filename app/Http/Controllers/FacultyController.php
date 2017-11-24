@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Faculty;
-use Illuminate\Http\Request;
+use Validator, Input, Redirect, Request, Session; 
 
 class FacultyController extends Controller
 {
@@ -18,7 +18,9 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        dd('hello');
+        $faculties = Faculty::all();
+
+        return view('faculty.index')->withFaculties($faculties);
     }
 
     /**
@@ -28,7 +30,7 @@ class FacultyController extends Controller
      */
     public function create()
     {
-        //
+        return view('faculty.create');        
     }
 
     /**
@@ -39,7 +41,26 @@ class FacultyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $rules = array(
+            'name'       => 'required|unique:faculties'
+        );
+        $validator = Validator::make(Request::all(), $rules);
+
+        if ($validator->fails()) {
+            return Redirect::to('faculty/create')
+                ->withErrors($validator->errors()->all());
+        } else {
+            // store
+            $faculty = new Faculty();
+            $faculty->name = Request::get('name');
+            $faculty->save();
+
+            // redirect
+            Session::flash('message', 'Novi fakultet je stvoren!');
+            return Redirect::to('faculty');
+        }
+
     }
 
     /**
@@ -50,7 +71,7 @@ class FacultyController extends Controller
      */
     public function show(Faculty $faculty)
     {
-        //
+        return $this->edit($faculty);
     }
 
     /**
@@ -61,7 +82,7 @@ class FacultyController extends Controller
      */
     public function edit(Faculty $faculty)
     {
-        //
+        return view('faculty.create')->withFaculty($faculty);                
     }
 
     /**
@@ -73,7 +94,23 @@ class FacultyController extends Controller
      */
     public function update(Request $request, Faculty $faculty)
     {
-        //
+         
+        $rules = array(
+            'name'       => 'required|unique:faculties'
+        );
+        $validator = Validator::make(Request::all(), $rules);
+
+        if ($validator->fails()) {
+            return Redirect::to('faculty/'.$faculty->id.'/edit')
+                ->withErrors($validator->errors()->all());
+        } else {
+
+            $faculty->name = Request::get('name');
+            $faculty->save();
+
+            Session::flash('message', 'Successfully updated faculty name!');
+            return Redirect::to('faculty');
+        }
     }
 
     /**
@@ -84,6 +121,9 @@ class FacultyController extends Controller
      */
     public function destroy(Faculty $faculty)
     {
-        //
+        $faculty->delete();
+        Session::flash('message', 'Successfully deleted a faculty!');
+        
+        return Redirect::to('faculty');        
     }
 }

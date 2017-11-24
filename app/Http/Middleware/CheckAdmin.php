@@ -19,6 +19,6 @@ class CheckAdmin
             return $next($request);            
         }
 
-        return redirect('/login');
+        return redirect('/home')->with('status','Vi niste administrator');
     }
 }
