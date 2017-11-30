@@ -78,7 +78,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Elektrijada Rezultati
+                    STEM games Rezultati
                 </div>
 
                 <div class="links">
